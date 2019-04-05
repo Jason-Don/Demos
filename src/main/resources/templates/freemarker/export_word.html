@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导出Word文件</title>
+</head>
+<body>
+<dev>
+    <form id="submit_form">
+        姓名：
+        <input id="name" name="hzName" type="text" />
+        性别：
+        <input id="sex" name="hzSex" type="text" />
+        <!--上传照片：
+        <input type="file" id="file" style="display:none;" onchange="filechange(event)">&lt;!&ndash;//修改，这里如果不用onchange，会出现一个小bug,当你提交后，图片只能变一次&ndash;&gt;
+        <img src="" width="200px" height="200px" id="img-change">-->
+    </form>
+
+    <input id="submit" type="button" value="提交" onclick="getWord()"/>
+</dev>
+</body>
+<script src="\js\common\jquery.min-1.11.3.js"></script>
+<script>
+    $("#img-change").click(function () {
+        $("#file").click();
+    })
+
+    function getWord() {
+        window.location.href="/freemarker/export_word/getWord?"+$("#submit_form").serialize();
+    }
+    /*$("#file").change(function (event) {*/
+    var filechange=function(event){
+        var files = event.target.files, file;
+        if (files && files.length > 0) {
+            // 获取目前上传的文件
+            file = files[0];// 文件大小校验的动作
+            if(file.size > 1024 * 1024 * 1) {
+                alert('图片大小不能超过 1MB!');
+                return false;
+            }
+            // 获取 window 的 URL 工具
+            var URL = window.URL || window.webkitURL;
+            // 通过 file 生成目标 url
+            var imgURL = URL.createObjectURL(file);
+            //用attr将img的src属性改成获得的url
+            $("#img-change").attr("src",imgURL);
+            // 使用下面这句可以在内存中释放对此 url 的伺服，跑了之后那个 URL 就无效了
+            // URL.revokeObjectURL(imgURL);
+        }
+    };
+</script>
+</html>
